@@ -34,14 +34,11 @@ import org.spongepowered.gradle.vanilla.resolver.HashAlgorithm;
 import org.spongepowered.gradle.vanilla.resolver.ResolutionResult;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -102,6 +99,18 @@ final class DownloaderBasedVersionManifestRepository implements VersionManifestR
 
     @Override
     public CompletableFuture<ResolutionResult<VersionDescriptor.Full>> fullVersion(final String versionId) {
+        if (versionId.equals("1.16_combat-6")) {
+            try (InputStreamReader reader = new InputStreamReader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("1_16_combat-6.json")))) {
+                return CompletableFuture.completedFuture(
+                        ResolutionResult.result(
+                                GsonUtils.GSON.fromJson(reader, VersionDescriptor.Full.class), true
+                        )
+                );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return this.resolvedVersions.computeIfAbsent(versionId, version -> this.manifest().thenCompose(manifest -> {
             final VersionDescriptor.@Nullable Reference option = manifest.findDescriptor(version).orElse(null);
             if (option == null) {

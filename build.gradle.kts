@@ -11,7 +11,7 @@ plugins {
     alias(libs.plugins.eclipseApt) apply false
 }
 
-group = "org.spongepowered"
+group = "nl.skbotnl.sponge"
 version = "0.2.1-SNAPSHOT"
 
 
