@@ -21,3 +21,4 @@ gradlew text eol=lf
 *.ttf binary
 *.wav binary
 JavaApplicationStub binary
+.gitea/CODEOWNERS linguist-detectable=false
